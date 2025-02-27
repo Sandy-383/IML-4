@@ -1,0 +1,6 @@
+example,shape,size,color,surface,thickness,target concept
+1,ciruclar,large,light,smooth,thick,maligant
+2,ciruclar,large,light,irregular,thick,maligant
+3,oval,large,dark,smooth,thin,bereign
+4,oval,large,light,irregular,thick,maligant
+5,ciruclar,small,light,smooth,thick,bereign
