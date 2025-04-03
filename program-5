@@ -1,34 +1,32 @@
-from sklearn.datasets import load_iris
-from sklearn.model_selection import train_test_split
+import numpy as np
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
+from sklearn.datasets import load_iris
+import matplotlib.pyplot as plt
 
-iris = load_iris()
-X, y = iris.data, iris.target
+irisData=load_iris()
+x=irisData.data
+y=irisData.target
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+x_train,x_test,y_train,y_test= train_test_split(x,y,test_size=0.2,random_state=42)
 
-k = 5
-knn = KNeighborsClassifier(n_neighbors=k)
-knn.fit(X_train, y_train)
+neighbors=np.arange(1,9)
+train_accuracy=np.empty(len(neighbors))
+test_accuracy=np.empty(len(neighbors))
 
-y_pred = knn.predict(X_test)
+for i,k in enumerate(neighbors):
+    knn=KNeighborsClassifier(n_neighbors=k)
+    knn.fit(x_train,y_train)
+    
+    train_accuracy[i]=knn.score(x_train,y_train)
+    test_accuracy[i]=knn.score(x_test,y_test)
+    
+plt.plot(neighbors,test_accuracy,label='testing dataset accuracy')
+plt.plot(neighbors,train_accuracy,label='training dataset accuracy')
 
-correct, incorrect = [], []
+plt.legend()
+plt.xlabel("n_neighbors")
+plt.ylabel("Accuracy")
+plt.show()
 
-for i in range(len(y_test)):
-    if y_pred[i] == y_test[i]:
-        correct.append((X_test[i], y_pred[i], y_test[i]))
-    else:
-        incorrect.append((X_test[i], y_pred[i], y_test[i]))
-
-print("\nCorrect Predictions:")
-for sample, predicted, actual in correct:
-    print(f"Sample: {sample}, Predicted: {iris.target_names[predicted]}, Actual: {iris.target_names[actual]}")
-
-print("\nIncorrect Predictions:")
-for sample, predicted, actual in incorrect:
-    print(f"Sample: {sample}, Predicted: {iris.target_names[predicted]}, Actual: {iris.target_names[actual]}")
-
-accuracy = accuracy_score(y_test, y_pred)
-print(f"\nModel Accuracy: {accuracy * 100:.2f}%")
+    
